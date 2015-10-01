@@ -172,7 +172,7 @@ def get_from_environ(key):
 def main():
 
     logging.info('Starting BigInvisibleThing')
-    config_path = 'biginvisiblething.conf'
+    config_path = 'biginvisiblething.conf.example'
 
     with open(config_path) as config_file:
         config = json.load(config_file)
