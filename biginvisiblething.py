@@ -64,6 +64,9 @@ class BigInvisibleThing(object):
         self.config['tumblr_api_key_4']
         )
 
+        for blog in tumblr.blog:
+            self.config[blog] = {'last_post_time': '2015-01-01 00:00:00 GMT'}
+
         self.login(self.config['REDDIT_USERNAME'], self.config['REDDIT_PASSWORD'])
 
     def login(self, REDDIT_USERNAME, REDDIT_PASSWORD):
