@@ -16,6 +16,7 @@ import time
 import traceback
 import logging
 import sys
+import tumblr
 
 root = logging.getLogger()
 root.setLevel(logging.INFO)
@@ -74,9 +75,13 @@ class BigInvisibleThing(object):
         logging.info('Login to tumblr')
         pass
 
-    def is_new_post_exists(self):
-        most_recent_post_date = self.tumblr.posts('discount-supervillain')['posts'][0]['date']
-        if time.strptime(self.config['last_post_time'], self.config['tumblr_date_format']) < time.strptime(most_recent_post_date, self.config['tumblr_date_format']):
+    def is_new_post_exists(self, blog):
+        logging.info('Check if new post exists')
+        if self.tumblr.posts(blog)['posts'] == []:
+            return False
+
+        most_recent_post_date = self.tumblr.posts(blog)['posts'][0]['date']
+        if time.strptime(self.config[blog]['last_post_time'], self.config['tumblr_date_format']) < time.strptime(most_recent_post_date, self.config['tumblr_date_format']):
             return(True)
         else:
             return(False)
@@ -89,20 +94,20 @@ class BigInvisibleThing(object):
                 pass
         return(False)
 
-    def get_new_post(self):
+    def get_new_post(self, blog):
         """
         Checks for new_post
         returns url and tags if new_post
         else returns False
         """
 
-        if self.is_new_post_exists():
-            dictionary = self.tumblr.posts('discount-supervillain')['posts'][0]
+        if self.is_new_post_exists(blog):
+            logging.info('New post')
+            dictionary = self.tumblr.posts(blog)['posts'][0]
 
+            self.config[blog]['last_post_time'] = dictionary['date']
 
-            self.config['last_post_time'] = dictionary['date']
-
-            last_post_time = self.config['last_post_time']
+            last_post_time = self.config[blog]['last_post_time']
             tumblr_date_format = self.config['tumblr_date_format']
 
             url = dictionary['post_url']
@@ -121,14 +126,16 @@ class BigInvisibleThing(object):
 
             tags = dictionary['tags']
 
-            return({'url':url, 'tags': tags, 'post_title': post_title, 'post_time': post_time})
+            return({'url':url, 'tags': tags, 'post_title': post_title, 'post_time': post_time, 'blog': blog})
         else:
+            logging.info('No new post')
             return(False)
 
-    def submit_to(self, subreddit, url, tags, post_title, post_time):
+    def submit_to(self, subreddit, url, tags, post_title, post_time, blog):
         try:
+            logging.info("Trying to submit %s to %s", blog, subreddit)
             submission_object = self.reddit.submit(subreddit,
-                                        '[discount-supervillain] '+str(post_time)+' '+post_title,
+                                        '[' + blog + '] '+str(post_time)+' '+post_title,
                                         url=str(url),
                                         text=None,
                                         captcha=None,
@@ -154,13 +161,13 @@ class BigInvisibleThing(object):
             raise
 
 
-    def submit(self, url, tags, post_title, post_time, test_subreddit=None):
+    def submit(self, url, tags, post_title, post_time, blog, test_subreddit=None):
 
         if test_subreddit:
-            self.submit_to(test_subreddit, url, tags, post_title, post_time)
+            self.submit_to(test_subreddit, url, tags, post_title, post_time, blog)
 
         if self.is_post_about('Steven Universe', tags):
-            self.submit_to('stevenuniverse', url, tags, post_title, post_time)
+            self.submit_to('stevenuniverse', url, tags, post_title, post_time, blog)
 
 
 def get_from_environ(key):
@@ -190,14 +197,17 @@ def main():
         if int(time.strftime('%M')) + int(time.strftime('%S')) == 0:
             logging.info("Tick Tock")
         try:
-            new_post = biginvisiblething.get_new_post()
 
-            if new_post:
-                logging.info('We have a new post here!')
-                biginvisiblething.submit(**new_post)
-            else:
-                logging.debug('Post already submitted')
-                pass
+            for blog in tumblr.blog:
+
+                new_post = biginvisiblething.get_new_post(blog)
+
+                if new_post:
+                    logging.info('We have a new post here!')
+                    biginvisiblething.submit(**new_post)
+                else:
+                    logging.debug('No new post')
+                    pass
 
         except Exception:
             raise
