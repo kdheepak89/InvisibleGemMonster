@@ -79,7 +79,7 @@ class BigInvisibleThing(object):
         pass
 
     def is_new_post_exists(self, blog):
-        logging.info('Check if new post exists')
+        logging.info('Check if new post exists in %s', blog)
         if self.tumblr.posts(blog)['posts'] == []:
             return False
 
