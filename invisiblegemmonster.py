@@ -42,12 +42,12 @@ def strip_tags(html):
     s.feed(html)
     return s.get_data()
 
-class BigInvisibleThing(object):
+class InvisibleGemMonster(object):
     """
-    BigInvisibleThing gets posts from tumblr page
+    InvisibleGemMonster gets posts from tumblr page
     and posts them to Reddit
 
-    BigInvisibleThing will post to the following subreddits
+    InvisibleGemMonster will post to the following subreddits
         * /r/stevenuniverse
     """
 
@@ -196,9 +196,9 @@ def get_from_environ(key):
 
 def main():
 
-    config_path = 'biginvisiblething.conf.example'
+    config_path = 'invisiblegemmonster.conf.example'
     logger = logging.getLogger(__name__)
-    logger.info('Starting BigInvisibleThing')
+    logger.info('Starting InvisibleGemMonster')
 
     with open(config_path) as config_file:
         config = json.load(config_file)
@@ -208,7 +208,7 @@ def main():
             logger.info('Getting %s from environment', key)
             config[key] = get_from_environ(key)
 
-    biginvisiblething = BigInvisibleThing(**config)
+    invisiblegemmonster = InvisibleGemMonster(**config)
 
     while True:
         logger.debug('Sleep for 1 second')
@@ -219,11 +219,11 @@ def main():
 
             for blog in tumblr.blog:
 
-                new_post = biginvisiblething.get_new_post(blog)
+                new_post = invisiblegemmonster.get_new_post(blog)
 
                 if new_post:
                     logger.info('We have a new post here!')
-                    biginvisiblething.submit(**new_post)
+                    invisiblegemmonster.submit(**new_post)
                 else:
                     logger.debug('No new post')
                     pass
