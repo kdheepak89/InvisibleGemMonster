@@ -53,8 +53,8 @@ class BigInvisibleThing(object):
 
     def __init__(self, **kwargs):
         self.config = kwargs
-
-        logging.info('Initializing')
+        self.logger = kwargs.pop('logger', logging.getLogger(__name__))
+        self.logger.info('Initializing')
         self.reddit = praw.Reddit(user_agent=self.config['user_agent'])
 
         self.tumblr = pytumblr.TumblrRestClient(
@@ -72,14 +72,14 @@ class BigInvisibleThing(object):
     def login(self, REDDIT_USERNAME, REDDIT_PASSWORD):
         """Logs into Reddit and Tumblr"""
 
-        logging.info('Login to reddit')
+        self.logger.info('Login to reddit')
         self.reddit.login(REDDIT_USERNAME, REDDIT_PASSWORD, disable_warning=True)
 
-        logging.info('Login to tumblr')
+        self.logger.info('Login to tumblr')
         pass
 
     def is_new_post_exists(self, blog):
-        logging.info('Check if new post exists in %s', blog)
+        self.logger.info('Check if new post exists in %s', blog)
         if self.tumblr.posts(blog)['posts'] == []:
             return False
 
@@ -105,7 +105,7 @@ class BigInvisibleThing(object):
         """
 
         if self.is_new_post_exists(blog):
-            logging.info('New post')
+            self.logger.info('New post')
             dictionary = self.tumblr.posts(blog)['posts'][0]
 
             self.config[blog]['last_post_time'] = dictionary['date']
@@ -131,12 +131,12 @@ class BigInvisibleThing(object):
 
             return({'url':url, 'tags': tags, 'post_title': post_title, 'post_time': post_time, 'blog': blog})
         else:
-            logging.info('No new post')
+            self.logger.info('No new post')
             return(False)
 
     def submit_to(self, subreddit, url, tags, post_title, post_time, blog):
         try:
-            logging.info("Trying to submit %s to %s", blog, subreddit)
+            self.logger.info("Trying to submit %s to %s", blog, subreddit)
             submission_object = self.reddit.submit(subreddit,
                                         '[' + blog + '] '+str(post_time)+' '+post_title,
                                         url=str(url),
@@ -148,19 +148,19 @@ class BigInvisibleThing(object):
             if self.is_post_about('spoiler', tags):
                 submission_object.mark_as_nsfw()
         except praw.errors.AlreadySubmitted, e:
-            logging.info('Error occurred')
-            logging.info("Post already submitted")
+            self.logger.info('Error occurred')
+            self.logger.info("Post already submitted")
             pass
         except praw.errors.APIException, e:
-            logging.error("\n")
-            logging.error("[ERROR]:", e)
-            logging.error("\n")
+            self.logger.error("\n")
+            self.logger.error("[ERROR]:", e)
+            self.logger.error("\n")
             raise
         except Exception, e:
-            logging.error("\n")
-            logging.error("[ERROR]:", e)
-            logging.error("blindly handling any error")
-            logging.error("\n")
+            self.logger.error("\n")
+            self.logger.error("[ERROR]:", e)
+            self.logger.error("blindly handling any error")
+            self.logger.error("\n")
             raise
 
 
@@ -181,24 +181,25 @@ def get_from_environ(key):
 
 def main():
 
-    logging.info('Starting BigInvisibleThing')
     config_path = 'biginvisiblething.conf.example'
+    logger = logging.getLogger(__name__)
+    logger.info('Starting BigInvisibleThing')
 
     with open(config_path) as config_file:
         config = json.load(config_file)
 
     for key in config:
         if config[key] == '':
-            logging.info('Getting %s from environment', key)
+            logger.info('Getting %s from environment', key)
             config[key] = get_from_environ(key)
 
     biginvisiblething = BigInvisibleThing(**config)
 
     while True:
-        logging.debug('Sleep for 1 second')
+        logger.debug('Sleep for 1 second')
         time.sleep(1)
         if int(time.strftime('%M')) + int(time.strftime('%S')) == 0:
-            logging.info("Tick Tock")
+            logger.info("Tick Tock")
         try:
 
             for blog in tumblr.blog:
@@ -206,15 +207,15 @@ def main():
                 new_post = biginvisiblething.get_new_post(blog)
 
                 if new_post:
-                    logging.info('We have a new post here!')
+                    logger.info('We have a new post here!')
                     biginvisiblething.submit(**new_post)
                 else:
-                    logging.debug('No new post')
+                    logger.debug('No new post')
                     pass
 
         except Exception:
             raise
-            logging.error('Error occurred! %s', traceback.format_exc())
+            logger.error('Error occurred! %s', traceback.format_exc())
 
 
 if __name__ == '__main__':
