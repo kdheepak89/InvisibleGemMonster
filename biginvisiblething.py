@@ -91,7 +91,7 @@ class BigInvisibleThing(object):
 
     def is_post_about(self, check_tag, tags):
         for tag in tags:
-            if check_tag in tag:
+            if check_tag.lower() in tag.lower():
                 return(True)
             else:
                 pass
@@ -168,10 +168,25 @@ class BigInvisibleThing(object):
 
         if test_subreddit:
             self.submit_to(test_subreddit, url, tags, post_title, post_time, blog)
+            return None
 
         if self.is_post_about('Steven Universe', tags):
             self.submit_to('stevenuniverse', url, tags, post_title, post_time, blog)
 
+        if self.is_post_about('Undertale', tags):
+            self.submit_to('undertale', url, tags, post_title, post_time, blog)
+
+        if self.is_post_about('Rick And Morty', tags):
+            self.submit_to('rickandmorty', url, tags, post_title, post_time, blog)
+
+        if self.is_post_about('Adventure Time', tags):
+            self.submit_to('adventuretime', url, tags, post_title, post_time, blog)
+
+        if self.is_post_about('Gravity Falls', tags):
+            self.submit_to('gravityfalls', url, tags, post_title, post_time, blog)
+
+        if self.is_post_about('Over The Garden Wall', tags):
+            self.submit_to('overthegardenwall', url, tags, post_title, post_time, blog)
 
 def get_from_environ(key):
     try:
