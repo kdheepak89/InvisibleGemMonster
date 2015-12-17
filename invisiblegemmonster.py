@@ -50,8 +50,11 @@ class InvisibleGemMonster(object):
         self.config = kwargs
         self.logger = kwargs.pop('logger', logging.getLogger(__name__))
         self.logger.info('Initializing')
+
+        # Create reddit agent
         self.reddit = praw.Reddit(user_agent=self.config['user_agent'])
 
+        # Create tumblr agent
         self.tumblr = pytumblr.TumblrRestClient(
         self.config['tumblr_api_key_1'],
         self.config['tumblr_api_key_2'],
@@ -59,9 +62,11 @@ class InvisibleGemMonster(object):
         self.config['tumblr_api_key_4']
         )
 
+        # set default initial value for last_post_time for all blog
         for blog in tumblr.blog:
             self.config[blog] = {'last_post_time': '2015-01-01 00:00:00 GMT'}
 
+        # login
         self.login(self.config['REDDIT_USERNAME'], self.config['REDDIT_PASSWORD'])
 
     def login(self, REDDIT_USERNAME, REDDIT_PASSWORD):
@@ -78,6 +83,7 @@ class InvisibleGemMonster(object):
         if self.tumblr.posts(blog)['posts'] == []:
             return False
 
+        # compare post time with last_post_time
         most_recent_post_date = self.tumblr.posts(blog)['posts'][0]['date']
         if time.strptime(self.config[blog]['last_post_time'], self.config['tumblr_date_format']) < time.strptime(most_recent_post_date, self.config['tumblr_date_format']):
             return(True)
