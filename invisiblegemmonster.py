@@ -40,6 +40,10 @@ class InvisibleGemMonster(object):
 
     InvisibleGemMonster will post to the following subreddits
         * /r/stevenuniverse
+        * /r/gravityfalls
+        * /r/overthegardenwall
+        * /r/rickandmorty
+        * /r/adventuretime
     """
 
     def __init__(self, **kwargs):
