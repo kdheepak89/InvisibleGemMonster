@@ -18,15 +18,6 @@ import logging
 import sys
 import tumblr
 
-root = logging.getLogger()
-root.setLevel(logging.INFO)
-
-ch = logging.StreamHandler(sys.stdout)
-ch.setLevel(logging.INFO)
-formatter = logging.Formatter('%(message)s')
-ch.setFormatter(formatter)
-root.addHandler(ch)
-
 
 class MLStripper(HTMLParser):
     def __init__(self):
@@ -194,6 +185,15 @@ def get_from_environ(key):
         raise
 
 def main():
+
+    # Add streamhandler to root logger
+    root = logging.getLogger()
+    root.setLevel(logging.INFO)
+    ch = logging.StreamHandler(sys.stdout)
+    ch.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(message)s')
+    ch.setFormatter(formatter)
+    root.addHandler(ch)
 
     config_path = 'invisiblegemmonster.conf.example'
     logger = logging.getLogger(__name__)
