@@ -23,7 +23,7 @@ root.setLevel(logging.INFO)
 
 ch = logging.StreamHandler(sys.stdout)
 ch.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter('%(message)s')
 ch.setFormatter(formatter)
 root.addHandler(ch)
 
