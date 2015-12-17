@@ -131,7 +131,7 @@ class BigInvisibleThing(object):
 
             return({'url':url, 'tags': tags, 'post_title': post_title, 'post_time': post_time, 'blog': blog})
         else:
-            self.logger.info('No new post')
+            self.logger.debug('No new post')
             return(False)
 
     def submit_to(self, subreddit, url, tags, post_title, post_time, blog):
