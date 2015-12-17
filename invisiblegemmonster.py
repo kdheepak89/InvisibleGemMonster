@@ -229,8 +229,7 @@ def main():
                     pass
         except praw.errors.InvalidCaptcha:
             logger.warning("Unable to post, Captcha issue")
-        except Exception:
-            raise
+        except Exception, e:
             logger.error('Error occurred! %s', traceback.format_exc())
 
 
