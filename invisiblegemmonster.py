@@ -226,7 +226,6 @@ def main():
                     logger.debug('No new post')
                     pass
             except praw.errors.InvalidCaptcha:
-                logger.error('Error occurred! %s', traceback.format_exc())
                 logger.warning("Unable to post, Captcha issue")
             except Exception, e:
                 logger.error('Error occurred! %s', traceback.format_exc())
