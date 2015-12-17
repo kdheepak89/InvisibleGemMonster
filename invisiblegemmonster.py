@@ -159,9 +159,8 @@ class InvisibleGemMonster(object):
         except Exception, e:
             self.logger.error("\n")
             self.logger.error("[ERROR]:", e)
-            self.logger.error("blindly handling any error")
+            self.logger.error("Post may not have been submitted")
             self.logger.error("\n")
-            raise
 
 
     def submit(self, url, tags, post_title, post_time, blog, test_subreddit=None):
@@ -215,23 +214,22 @@ def main():
         time.sleep(1)
         if int(time.strftime('%M')) + int(time.strftime('%S')) == 0:
             logger.info("Tick Tock")
-        try:
 
-            for blog in tumblr.blog:
+        for blog in tumblr.blog:
 
+            try:
                 new_post = invisiblegemmonster.get_new_post(blog)
-
                 if new_post:
                     logger.info('We have a new post here!')
                     invisiblegemmonster.submit(**new_post)
                 else:
                     logger.debug('No new post')
                     pass
-        except praw.errors.InvalidCaptcha:
-            logger.error('Error occurred! %s', traceback.format_exc())
-            logger.warning("Unable to post, Captcha issue")
-        except Exception, e:
-            logger.error('Error occurred! %s', traceback.format_exc())
+            except praw.errors.InvalidCaptcha:
+                logger.error('Error occurred! %s', traceback.format_exc())
+                logger.warning("Unable to post, Captcha issue")
+            except Exception, e:
+                logger.error('Error occurred! %s', traceback.format_exc())
 
 
 if __name__ == '__main__':
