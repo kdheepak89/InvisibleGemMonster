@@ -1,2 +1,2 @@
-blog = ['discount-supervillian',
+blog = ['discount-supervillain',
         'stevencrewniverse']
