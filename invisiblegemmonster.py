@@ -148,6 +148,8 @@ class InvisibleGemMonster(object):
                                         save=False,
                                         send_replies=False)
 
+            if self.is_post_about('Steven Universe', tags):
+                submission_object.select_flair(flair_template_id="crewniverse")
             if self.is_post_about('spoiler', tags):
                 submission_object.mark_as_nsfw()
             return submission_object
@@ -176,7 +178,6 @@ class InvisibleGemMonster(object):
 
         if self.is_post_about('Steven Universe', tags):
             submission = self.submit_to('stevenuniverse', url, tags, post_title, post_time, blog)
-            submission.select_flair(flair_template_id="crewniverse")
 
         if self.is_post_about('Undertale', tags):
             submission = self.submit_to('undertale', url, tags, post_title, post_time, blog)
