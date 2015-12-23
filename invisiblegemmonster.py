@@ -29,6 +29,7 @@ class MLStripper(HTMLParser):
         return ''.join(self.fed)
 
 def strip_tags(html):
+    html = html.replace('</p>', '</p>\n')
     s = MLStripper()
     s.feed(html)
     return s.get_data()
@@ -125,6 +126,7 @@ class InvisibleGemMonster(object):
             try:
                 post_title = dictionary['caption']
                 post_title = strip_tags(post_title)
+                post_title = post_title.split('\n')[0]
             except:
                 post_title = ''
 
@@ -139,7 +141,7 @@ class InvisibleGemMonster(object):
         try:
             self.logger.info("Trying to submit %s to %s", blog, subreddit)
             submission_object = self.reddit.submit(subreddit,
-                                        '[' + blog + '] '+str(post_time)+' '+post_title,
+                                        str(post_time)+' '+post_title,
                                         url=str(url),
                                         text=None,
                                         captcha=None,
@@ -163,30 +165,33 @@ class InvisibleGemMonster(object):
             self.logger.error("Post may not have been submitted")
             self.logger.error("\n")
 
+        return submission_object
+
 
     def submit(self, url, tags, post_title, post_time, blog, test_subreddit=None):
 
         if test_subreddit:
-            self.submit_to(test_subreddit, url, tags, post_title, post_time, blog)
-            return None
+            submission = self.submit_to(test_subreddit, url, tags, post_title, post_time, blog)
+            return submission
 
         if self.is_post_about('Steven Universe', tags):
-            self.submit_to('stevenuniverse', url, tags, post_title, post_time, blog)
+            submission = self.submit_to('stevenuniverse', url, tags, post_title, post_time, blog)
+            submission.select_flair(flair_template_id="crewniverse")
 
         if self.is_post_about('Undertale', tags):
-            self.submit_to('undertale', url, tags, post_title, post_time, blog)
+            submission = self.submit_to('undertale', url, tags, post_title, post_time, blog)
 
         if self.is_post_about('Rick And Morty', tags):
-            self.submit_to('rickandmorty', url, tags, post_title, post_time, blog)
+            submission = self.submit_to('rickandmorty', url, tags, post_title, post_time, blog)
 
         if self.is_post_about('Adventure Time', tags):
-            self.submit_to('adventuretime', url, tags, post_title, post_time, blog)
+            submission = self.submit_to('adventuretime', url, tags, post_title, post_time, blog)
 
         if self.is_post_about('Gravity Falls', tags):
-            self.submit_to('gravityfalls', url, tags, post_title, post_time, blog)
+            submission = self.submit_to('gravityfalls', url, tags, post_title, post_time, blog)
 
         if self.is_post_about('Over The Garden Wall', tags):
-            self.submit_to('overthegardenwall', url, tags, post_title, post_time, blog)
+            submission = self.submit_to('overthegardenwall', url, tags, post_title, post_time, blog)
 
 def get_from_environ(key):
     try:
