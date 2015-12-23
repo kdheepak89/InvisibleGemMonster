@@ -150,6 +150,7 @@ class InvisibleGemMonster(object):
 
             if self.is_post_about('spoiler', tags):
                 submission_object.mark_as_nsfw()
+            return submission_object
         except praw.errors.AlreadySubmitted, e:
             self.logger.info('Error occurred')
             self.logger.info("Post already submitted")
@@ -165,7 +166,6 @@ class InvisibleGemMonster(object):
             self.logger.error("Post may not have been submitted")
             self.logger.error("\n")
 
-        return submission_object
 
 
     def submit(self, url, tags, post_title, post_time, blog, test_subreddit=None):
