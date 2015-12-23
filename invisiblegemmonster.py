@@ -140,6 +140,10 @@ class InvisibleGemMonster(object):
     def submit_to(self, subreddit, url, tags, post_title, post_time, blog):
         try:
             self.logger.info("Trying to submit %s to %s", blog, subreddit)
+            self.logger.info(post_time)
+            self.logger.info(post_title)
+            self.logger.info(url)
+            self.logger.info(tags)
             submission_object = self.reddit.submit(subreddit,
                                         str(post_time)+' '+post_title,
                                         url=str(url),
