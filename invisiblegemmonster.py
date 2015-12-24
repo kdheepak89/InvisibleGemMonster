@@ -182,7 +182,7 @@ class InvisibleGemMonster(object):
         if self.is_post_about('Steven Universe', tags):
             submission = self.submit_to('stevenuniverse', url, tags, post_title, post_time, blog)
             if submission is not None:
-                submission.select_flair(flair_template_id="crewniverse")
+                submission.select_flair(flair_template_id='95e7a5ee-7da7-11e5-ae5f-0e7e1b254bb1')
 
         if self.is_post_about('Undertale', tags):
             submission = self.submit_to('undertale', url, tags, post_title, post_time, blog)
