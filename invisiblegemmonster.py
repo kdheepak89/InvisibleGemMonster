@@ -164,12 +164,12 @@ class InvisibleGemMonster(object):
             pass
         except praw.errors.APIException, e:
             self.logger.error("\n")
-            self.logger.error("[ERROR]:", e)
+            self.logger.error('Error occurred! %s', traceback.format_exc())
             self.logger.error("\n")
             raise
         except Exception, e:
             self.logger.error("\n")
-            self.logger.error("[ERROR]:", e)
+            self.logger.error('Error occurred! %s', traceback.format_exc())
             self.logger.error("Post may not have been submitted")
             self.logger.error("\n")
 
