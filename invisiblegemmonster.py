@@ -127,7 +127,7 @@ class InvisibleGemMonster(object):
             try:
                 post_title = dictionary['caption']
                 post_title = strip_tags(post_title)
-                post_title = post_title.split('\n')[0]
+                post_title = post_title.replace('\n', ' \n').split('\n')[0]
             except:
                 post_title = ''
 
@@ -145,8 +145,10 @@ class InvisibleGemMonster(object):
             self.logger.debug(post_title)
             self.logger.debug(url)
             self.logger.debug(tags)
+            if post_title == '':
+                post_title = str(post_time)
             submission_object = self.reddit.submit(subreddit,
-                                        str(post_time)+' '+post_title,
+                                        post_title,
                                         url=str(url),
                                         text=None,
                                         captcha=None,
