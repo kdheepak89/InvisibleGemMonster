@@ -108,7 +108,7 @@ class InvisibleGemMonster(object):
         """
 
         if self.is_new_post_exists(blog):
-            self.logger.info('New post')
+            self.logger.debug('New post')
             dictionary = self.tumblr.posts(blog)['posts'][0]
 
             self.config[blog]['last_post_time'] = dictionary['date']
@@ -141,10 +141,10 @@ class InvisibleGemMonster(object):
     def submit_to(self, subreddit, url, tags, post_title, post_time, blog):
         try:
             self.logger.info("Trying to submit %s to %s", blog, subreddit)
-            self.logger.info(post_time)
-            self.logger.info(post_title)
-            self.logger.info(url)
-            self.logger.info(tags)
+            self.logger.debug(post_time)
+            self.logger.debug(post_title)
+            self.logger.debug(url)
+            self.logger.debug(tags)
             submission_object = self.reddit.submit(subreddit,
                                         str(post_time)+' '+post_title,
                                         url=str(url),
