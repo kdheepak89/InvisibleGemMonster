@@ -30,5 +30,5 @@
               "10": "Oct",
               "11": "Nov",
               "12": "Dec"},
-"logger":"DEBUG"
+"logger_level":""
 }

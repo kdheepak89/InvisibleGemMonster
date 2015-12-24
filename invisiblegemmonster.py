@@ -229,7 +229,7 @@ def main():
         else:
             logger.info('Getting %s from file = {}', key, config[key])
 
-    if config["logger"] == "DEBUG":
+    if config["logger_level"] == "DEBUG" or config["logger_level"] == "":
         root.setLevel(logging.DEBUG)
         ch.setLevel(logging.DEBUG)
 
