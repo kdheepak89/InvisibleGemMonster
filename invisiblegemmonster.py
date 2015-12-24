@@ -227,6 +227,10 @@ def main():
             logger.info('Getting %s from environment', key)
             config[key] = get_from_environ(key)
 
+    if config['logger'] == 'DEBUG':
+        root.setLevel(logging.DEBUG)
+        ch.setLevel(logging.DEBUG)
+
     invisiblegemmonster = InvisibleGemMonster(**config)
 
     while True:
