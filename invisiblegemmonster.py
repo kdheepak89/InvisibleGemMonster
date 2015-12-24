@@ -226,8 +226,10 @@ def main():
         if config[key] == '':
             logger.info('Getting %s from environment', key)
             config[key] = get_from_environ(key)
+        else:
+            logger.info('Getting %s from file = {}', key, config[key])
 
-    if config['logger'] == 'DEBUG':
+    if config["logger"] == "DEBUG":
         root.setLevel(logging.DEBUG)
         ch.setLevel(logging.DEBUG)
 
