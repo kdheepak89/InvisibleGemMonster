@@ -80,7 +80,7 @@ class InvisibleGemMonster(object):
         pass
 
     def is_new_post_exists(self, blog):
-        self.logger.info('Check if new post exists in %s', blog)
+        self.logger.debug('Check if new post exists in %s', blog)
         if self.tumblr.posts(blog)['posts'] == []:
             return False
 
@@ -158,8 +158,8 @@ class InvisibleGemMonster(object):
                 submission_object.mark_as_nsfw()
             return submission_object
         except praw.errors.AlreadySubmitted, e:
-            self.logger.info('Error occurred')
-            self.logger.info("Post already submitted")
+            self.logger.error('Error occurred')
+            self.logger.error("Post already submitted")
             pass
         except praw.errors.APIException, e:
             self.logger.error("\n")
