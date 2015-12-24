@@ -2,6 +2,7 @@
 """
 Reddit-Tumblr bot
 """
+from __future__ import division
 
 from HTMLParser import HTMLParser
 from pytz import timezone
@@ -241,7 +242,7 @@ def main():
     while True:
         logger.debug('Sleep for 1 second')
         time.sleep(1)
-        if int(time.strftime('%M')) + int(time.strftime('%S')) == 0:
+        if int(int(time.strftime('%M'))%10.0) == 0 and int(int(time.strftime('%S'))%30.0)  == 0:
             logger.info("Tick Tock")
 
         for blog in tumblr.blog:
