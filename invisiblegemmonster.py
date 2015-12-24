@@ -225,7 +225,10 @@ def main():
     for key in config:
         if config[key] == '':
             logger.info('Getting %s from environment', key)
-            config[key] = get_from_environ(key)
+            try:
+                config[key] = get_from_environ(key)
+            except Exception, e:
+                logger.error("[ERROR]:", e)
         else:
             logger.info('Getting %s from file = {}', key, config[key])
 
