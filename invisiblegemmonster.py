@@ -107,13 +107,13 @@ class InvisibleGemMonster(object):
         else returns False
         """
 
-        if self.is_new_post_exists(blog):
+        if self.is_new_post_exists(blog[0]):
             self.logger.debug('New post')
-            dictionary = self.tumblr.posts(blog)['posts'][0]
+            dictionary = self.tumblr.posts(blog[0])['posts'][0]
 
-            self.config[blog]['last_post_time'] = dictionary['date']
+            self.config[blog[0]]['last_post_time'] = dictionary['date']
 
-            last_post_time = self.config[blog]['last_post_time']
+            last_post_time = self.config[blog[0]]['last_post_time']
             tumblr_date_format = self.config['tumblr_date_format']
 
             url = dictionary['post_url']
@@ -133,7 +133,7 @@ class InvisibleGemMonster(object):
 
             tags = dictionary['tags']
 
-            return({'url':url, 'tags': tags, 'post_title': post_title, 'post_time': post_time, 'blog': blog})
+            return({'url':url, 'tags': tags, 'post_title': post_title, 'post_time': post_time, 'blog': blog[0], 'official': blog[1]})
         else:
             self.logger.debug('No new post')
             return(False)
@@ -175,7 +175,7 @@ class InvisibleGemMonster(object):
 
 
 
-    def submit(self, url, tags, post_title, post_time, blog, test_subreddit=None):
+    def submit(self, url, tags, post_title, post_time, blog, official=False, test_subreddit=None):
 
         if test_subreddit:
             submission = self.submit_to(test_subreddit, url, tags, post_title, post_time, blog)
@@ -183,7 +183,7 @@ class InvisibleGemMonster(object):
 
         if self.is_post_about('Steven Universe', tags):
             submission = self.submit_to('stevenuniverse', url, tags, post_title, post_time, blog)
-            if submission is not None:
+            if submission is not None and official:
                 submission.select_flair(flair_template_id='95e7a5ee-7da7-11e5-ae5f-0e7e1b254bb1')
 
         if self.is_post_about('Undertale', tags):
@@ -248,10 +248,10 @@ def main():
         time.sleep(1)
         ticktock = ticktock + 1
         if int(ticktock / maxticktock) == 1:
-            logger.info("Tick Tock")
+            logger.info("Tick Tock = %s", str(ticktock))
             maxticktock = maxticktock*2
 
-        for blog in tumblr.blog:
+        for blog in tumblr.blog.items():
 
             try:
                 new_post = invisiblegemmonster.get_new_post(blog)
