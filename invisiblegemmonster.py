@@ -233,7 +233,7 @@ def main():
             except Exception, e:
                 logger.error("[ERROR]:", e)
         else:
-            logger.info('Getting %s from file = {}', key, config[key])
+            logger.info('Getting %s from file = %s', key, config[key])
 
     if config["logger_level"] == "DEBUG" or config["logger_level"] == "":
         root.setLevel(logging.DEBUG)
