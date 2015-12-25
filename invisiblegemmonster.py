@@ -241,11 +241,15 @@ def main():
 
     invisiblegemmonster = InvisibleGemMonster(**config)
 
+    ticktock = 0
+    maxticktock = 1
     while True:
         logger.debug('Sleep for 1 second')
         time.sleep(1)
-        if int(int(time.strftime('%M'))%10.0) == 0 and int(int(time.strftime('%S'))%30.0)  == 0:
+        ticktock = ticktock + 1
+        if int(ticktock / maxticktock) == 1:
             logger.info("Tick Tock")
+            maxticktock = maxticktock*2
 
         for blog in tumblr.blog:
 
