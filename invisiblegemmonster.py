@@ -244,8 +244,8 @@ def main():
     ticktock = 0
     maxticktock = 1
     while True:
-        logger.debug('Sleep for 1 second')
-        time.sleep(1)
+        # logger.debug('Sleep for 1 second')
+        # time.sleep(1)
         ticktock = ticktock + 1
         if int(ticktock / maxticktock) == 1:
             logger.info("Tick Tock = %s", str(ticktock))
