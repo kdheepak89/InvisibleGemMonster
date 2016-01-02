@@ -1,8 +1,6 @@
 blog = {
-        'gravi-teamfalls': True, # official gravity falls
-        'kingofooo':True, # official adventure time
-        'jasonfunderburker':True, # official over the garden wall
-        'stevencrewniverse':True, # official steven universe
-        'laurenzuke':True, # Lauren Zuke is a storyboard artist on Steven Universe
-        'rebeccasugar':True,
+        'gravi-teamfalls': 'gravityfalls', # official gravity falls
+        'kingofooo': 'adventuretime', # official adventure time
+        'jasonfunderburker': 'overthegardenwall', # official over the garden wall
+        'stevencrewniverse': 'stevenuniverse', # official steven universe
         }
