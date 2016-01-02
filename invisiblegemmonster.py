@@ -133,7 +133,7 @@ class InvisibleGemMonster(object):
 
             tags = dictionary['tags']
 
-            return({'url':url, 'tags': tags, 'post_title': post_title, 'post_time': post_time, 'blog': blog[0], 'official': blog[1]})
+            return({'url':url, 'tags': tags, 'post_title': post_title, 'post_time': post_time, 'blog': blog[0], 'subreddit': blog[1]})
         else:
             self.logger.debug('No new post')
             return(False)
@@ -175,31 +175,17 @@ class InvisibleGemMonster(object):
 
 
 
-    def submit(self, url, tags, post_title, post_time, blog, official=False, test_subreddit=None):
+    def submit(self, url, tags, post_title, post_time, blog, subreddit=False, test_subreddit=None):
 
         if test_subreddit:
             submission = self.submit_to(test_subreddit, url, tags, post_title, post_time, blog)
             return submission
 
-        if self.is_post_about('Steven Universe', tags):
-            submission = self.submit_to('stevenuniverse', url, tags, post_title, post_time, blog)
-            if submission is not None and official:
-                submission.select_flair(flair_template_id='95e7a5ee-7da7-11e5-ae5f-0e7e1b254bb1')
+        if subreddit == 'stevenuniverse':
+            submission = self.submit_to(subreddit, url, tags, post_title, post_time, blog)
+            submission.select_flair(flair_template_id='95e7a5ee-7da7-11e5-ae5f-0e7e1b254bb1')
 
-        if self.is_post_about('Undertale', tags):
-            submission = self.submit_to('undertale', url, tags, post_title, post_time, blog)
-
-        if self.is_post_about('Rick And Morty', tags):
-            submission = self.submit_to('rickandmorty', url, tags, post_title, post_time, blog)
-
-        if self.is_post_about('Adventure Time', tags):
-            submission = self.submit_to('adventuretime', url, tags, post_title, post_time, blog)
-
-        if self.is_post_about('Gravity Falls', tags):
-            submission = self.submit_to('gravityfalls', url, tags, post_title, post_time, blog)
-
-        if self.is_post_about('Over The Garden Wall', tags):
-            submission = self.submit_to('overthegardenwall', url, tags, post_title, post_time, blog)
+        submission = self.submit_to(subreddit, url, tags, post_title, post_time, blog)
 
 def get_from_environ(key):
     try:
